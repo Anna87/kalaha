@@ -104,7 +104,7 @@ public class BoardService {
     }
 
     private void completeRound(final Board board, final RoundHolder roundHolder) {
-        if (board.isGameOver()) {
+        if (board.hasEmptyRow()) {
             moveRemainingStonesToKalaha(board);
             board.setGameOver(true);
         } else if (!roundHolder.isCanDoExtraRound()) {
@@ -113,7 +113,7 @@ public class BoardService {
     }
 
     private void setNextPlayer(final Board board) {
-        final Player nextPlayer = FIRST.equals(board.getNextPlayer()) ? SECOND : FIRST;
+        final Player nextPlayer = ONE.equals(board.getNextPlayer()) ? TWO : ONE;
         board.setNextPlayer(nextPlayer);
     }
 
@@ -122,7 +122,7 @@ public class BoardService {
     }
 
     private int getCurrentPlayerRowIndex(Player player) {
-        return FIRST.equals(player) ? 1 : 2;
+        return ONE.equals(player) ? 1 : 2;
     }
 
 }

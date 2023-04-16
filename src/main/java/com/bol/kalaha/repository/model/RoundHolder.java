@@ -45,7 +45,7 @@ public class RoundHolder {
     }
 
     public boolean isOwnRow() {
-        final int currentPlayerRowIndex = this.currentPlayer.equals(Player.FIRST) ? 1 : 2;
+        final int currentPlayerRowIndex = this.currentPlayer.equals(Player.ONE) ? 1 : 2;
         return currentPlayerRowIndex == rowIndex;
     }
 

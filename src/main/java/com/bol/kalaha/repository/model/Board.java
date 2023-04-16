@@ -17,7 +17,7 @@ public class Board {
     public Board() {
         this.rowOne = new Row();
         this.rowTwo = new Row();
-        this.nextPlayer = Player.FIRST;
+        this.nextPlayer = Player.ONE;
     }
 
     public Row getRowByIndex(final int rowIndex) {
@@ -28,7 +28,7 @@ public class Board {
         return getRowByIndex(rowIndex).getCells().get(cellIndex);
     }
 
-    public boolean isGameOver() {
+    public boolean hasEmptyRow() {
         return isRowEmpty(this.rowOne) || isRowEmpty(this.rowTwo);
     }
 
@@ -41,8 +41,8 @@ public class Board {
 
     private Player getWinnerPlayer() {
         return this.rowOne.getKalahaStones() > this.rowTwo.getKalahaStones()
-                ? Player.FIRST
-                : Player.SECOND;
+                ? Player.ONE
+                : Player.TWO;
     }
 
     private boolean isRowEmpty(final Row row) {

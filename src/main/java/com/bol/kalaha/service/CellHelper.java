@@ -10,7 +10,7 @@ public class CellHelper {
 
     public static Cell getCurrentCell(Board board, int cellIndex) {
         final Player currentPlayer = board.getNextPlayer();
-        return currentPlayer.equals(Player.FIRST) ?
+        return currentPlayer.equals(Player.ONE) ?
                 board.getRowOne().getCells().get(cellIndex) :
                 board.getRowTwo().getCells().get(cellIndex);
     }
