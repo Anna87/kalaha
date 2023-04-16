@@ -22,10 +22,6 @@ public class CellHelper {
         return stones;
     }
 
-    private static Cell getCell(Board board, int rowIndex, int cellIndex) {
-        return board.getCell(rowIndex, cellIndex);
-    }
-
     public static void putOneStoneInCell(Board board, int rowIndex, int cellIndex) {
         final Cell cell = getCell(board, rowIndex, cellIndex);
         cell.setStones(cell.getStones() + 1);
@@ -39,10 +35,6 @@ public class CellHelper {
         addStonesToKalaha(stones, board.getRowByIndex(rowIndex));
     }
 
-    private static void addStonesToKalaha(int stones, Row row) {
-        row.setKalahaStones(row.getKalahaStones() + stones);
-    }
-
     public static boolean checkRuleEmptyOwnCell(Board board, RoundHolder roundHolder) {
         return roundHolder.isOwnRow()
                 && getCell(board, roundHolder.getRowIndex(), roundHolder.getCellIndex()).getStones() == 0;
@@ -52,17 +44,25 @@ public class CellHelper {
         return (MAX_INDEX_OF_CELL - cellIndex);
     }
 
+    private static Cell getCell(Board board, int rowIndex, int cellIndex) {
+        return board.getCell(rowIndex, cellIndex);
+    }
+
+    private static void addStonesToKalaha(int stones, Row row) {
+        row.setKalahaStones(row.getKalahaStones() + stones);
+    }
+
+    public static void moveRemainingStonesToKalaha(Board board) {
+        moveStonesToKalaha(board.getRowOne());
+        moveStonesToKalaha(board.getRowTwo());
+    }
+
     private static void moveStonesToKalaha(final Row row) {
         row.getCells()
            .forEach(cell -> {
                addStonesToKalaha(cell.getStones(), row);
                cell.setStones(0);
            });
-    }
-
-    public static void moveRemainingStonesToKalaha(Board board) {
-        moveStonesToKalaha(board.getRowOne());
-        moveStonesToKalaha(board.getRowTwo());
     }
 
 }

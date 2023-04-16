@@ -28,12 +28,12 @@ public class BoardController {
     }
 
     @PutMapping(path = "/{id}")
-    public BoardState play(@RequestBody @Valid final PlayRequest playRequest, @PathVariable("id") final UUID id){
+    public BoardState play(@RequestBody @Valid final PlayRequest playRequest, @PathVariable("id") final UUID id) {
         return boardService.play(id, playRequest);
     }
 
     @GetMapping(path = "/{id}")
-    public BoardState getBoard(@PathVariable("id") final UUID id){
+    public BoardState getBoard(@PathVariable("id") final UUID id) {
         return boardService.getBoard(id);
     }
 }

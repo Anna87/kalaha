@@ -30,16 +30,8 @@ public class BoardService {
 
         validateBoardState(board, playRequest);
 
-        final int cellIndex = playRequest.getCellIndex();
-        final int currentPlayerRowIndex = getCurrentPlayerRowIndex(playRequest.getPlayer());
-        final int stones = pollStones(board, currentPlayerRowIndex, cellIndex);
+        final RoundHolder roundHolder = buildRoundHolder(playRequest, board);
 
-        final RoundHolder roundHolder = RoundHolder.builder()
-                                                   .stones(stones)
-                                                   .currentPlayer(playRequest.getPlayer())
-                                                   .rowIndex(currentPlayerRowIndex)
-                                                   .cellIndex(cellIndex + 1)
-                                                   .build();
         moveStones(board, roundHolder);
 
         completeRound(board, roundHolder);
@@ -51,8 +43,17 @@ public class BoardService {
         return BoardState.from(findBoard(id));
     }
 
-    private Board findBoard(final UUID id) {
-        return boardRepository.findById(id).orElseThrow(() -> new BoardNotFoundException("Board not found"));
+    private RoundHolder buildRoundHolder(final PlayRequest playRequest, final Board board) {
+        final int cellIndex = playRequest.getCellIndex();
+        final int currentPlayerRowIndex = getCurrentPlayerRowIndex(playRequest.getPlayer());
+        final int stones = pollStones(board, currentPlayerRowIndex, cellIndex);
+
+        return RoundHolder.builder()
+                          .stones(stones)
+                          .currentPlayer(playRequest.getPlayer())
+                          .rowIndex(currentPlayerRowIndex)
+                          .cellIndex(cellIndex + 1)
+                          .build();
     }
 
     private void moveStones(final Board board, final RoundHolder roundHolder) {
@@ -62,18 +63,8 @@ public class BoardService {
         } while (roundHolder.getStones() > 0);
     }
 
-    private void completeRound(final Board board, final RoundHolder roundHolder) {
-        if (board.isGameOver()) {
-            moveRemainingStonesToKalaha(board);
-            board.setGameOver(true);
-        } else if (!roundHolder.isCanDoExtraRound()) {
-            setNextPlayer(board);
-        }
-    }
-
-    private void setNextPlayer(final Board board) {
-        final Player nextPlayer = FIRST.equals(board.getNextPlayer()) ? SECOND : FIRST;
-        board.setNextPlayer(nextPlayer);
+    private Board findBoard(final UUID id) {
+        return boardRepository.findById(id).orElseThrow(() -> new BoardNotFoundException("Board not found"));
     }
 
     private void moveOneStone(final Board board, final RoundHolder roundHolder) {
@@ -96,7 +87,7 @@ public class BoardService {
 
     }
 
-    private void stealStones(Board board, RoundHolder roundHolder) {
+    private void stealStones(final Board board, final RoundHolder roundHolder) {
         final int rowIndex = roundHolder.getRowIndex();
         putOneStoneInKalaha(board, rowIndex);
 
@@ -105,6 +96,20 @@ public class BoardService {
         final int stones = pollStones(board, reverseRowIndex, reverseCellIndex);
 
         putStonesInKalaha(board, rowIndex, stones);
+    }
+
+    private void completeRound(final Board board, final RoundHolder roundHolder) {
+        if (board.isGameOver()) {
+            moveRemainingStonesToKalaha(board);
+            board.setGameOver(true);
+        } else if (!roundHolder.isCanDoExtraRound()) {
+            setNextPlayer(board);
+        }
+    }
+
+    private void setNextPlayer(final Board board) {
+        final Player nextPlayer = FIRST.equals(board.getNextPlayer()) ? SECOND : FIRST;
+        board.setNextPlayer(nextPlayer);
     }
 
     private int getReverseRowIndex(int rowIndex) {

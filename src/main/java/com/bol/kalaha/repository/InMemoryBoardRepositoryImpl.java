@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class InMemoryBoardRepositoryImpl implements BoardRepository {
 
-    final Map<UUID, Board> boards = new ConcurrentHashMap<>();
+    private final Map<UUID, Board> boards = new ConcurrentHashMap<>();
 
     @Override
     public Board create(Board board) {
