@@ -1,0 +1,52 @@
+{
+  "boardId": null,
+  "nextPlayer": "FIRST",
+  "rowOne": {
+    "cells": [
+      {
+        "stones": 5
+      },
+      {
+        "stones": 5
+      },
+      {
+        "stones": 5
+      },
+      {
+        "stones": 1
+      },
+      {
+        "stones": 0
+      },
+      {
+        "stones": 5
+      }
+    ],
+    "kalahaStones": 0
+  },
+  "rowTwo": {
+    "cells": [
+      {
+        "stones": 0
+      },
+      {
+        "stones": 3
+      },
+      {
+        "stones": 0
+      },
+      {
+        "stones": 0
+      },
+      {
+        "stones": 0
+      },
+      {
+        "stones": 0
+      }
+    ],
+    "kalahaStones": 30
+  },
+  "gameOver": false,
+  "winner": null
+}
