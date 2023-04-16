@@ -1,0 +1,52 @@
+{
+  "boardId": "7600de83-9ebe-4811-bcfb-d4963b62aa50",
+  "nextPlayer": "SECOND",
+  "rowOne": {
+    "cells": [
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      },
+      {
+        "stones": 1
+      },
+      {
+        "stones": 1
+      },
+      {
+        "stones": 0
+      }
+    ],
+    "kalahaStones": 1
+  },
+  "rowTwo": {
+    "cells": [
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      },
+      {
+        "stones": 2
+      }
+    ],
+    "kalahaStones": 0
+  },
+  "gameOver": false,
+  "winner": null
+}

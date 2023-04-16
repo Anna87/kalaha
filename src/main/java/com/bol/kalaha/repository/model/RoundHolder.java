@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RoundHolder {
-    protected static final int KALAHA_INDEX = 6;
+    private static final int KALAHA_INDEX = 6;
 
     private int stones;
     private Player currentPlayer;
@@ -15,31 +15,54 @@ public class RoundHolder {
     private boolean canDoExtraRound;
 
     public void shift() {
-        this.stones--;
-
-        if(this.cellIndex < KALAHA_INDEX) {
-            this.cellIndex++;
+        if (isKalaha()) {
+            swapRowIndex();
+            resetCellIndex();
         } else {
-            this.rowIndex = rowIndex == 1 ? 2 : 1;
-            this.cellIndex = 0;
+            incrementCellIndex();
         }
-    }
 
-    public boolean checkRuleIsOwnKalaha(){
-        return isOwnRow() && isKalaha();
-    }
+        if (!isOpponentKalaha()) {
+            this.stones--;
+        }
 
-    public boolean isOwnRow(){
-        final int currentPlayerRowIndex = this.currentPlayer.equals(Player.FIRST) ? 1 : 2 ;
-        return currentPlayerRowIndex == rowIndex;
     }
 
     public boolean isKalaha() {
         return this.cellIndex == KALAHA_INDEX;
     }
 
+    public boolean putInCell() {
+        return !isKalaha();
+    }
+
+    private boolean isOpponentKalaha() {
+        return isKalaha() && !isOwnRow();
+    }
+
+    public boolean checkRuleIsOwnKalaha() {
+        return isOwnRow() && isKalaha();
+    }
+
+    public boolean isOwnRow() {
+        final int currentPlayerRowIndex = this.currentPlayer.equals(Player.FIRST) ? 1 : 2;
+        return currentPlayerRowIndex == rowIndex;
+    }
+
     public boolean isLastStone() {
-        return this.stones  == 1;
+        return this.stones == 1;
+    }
+
+    private void incrementCellIndex() {
+        this.cellIndex++;
+    }
+
+    private void resetCellIndex() {
+        this.cellIndex = 0;
+    }
+
+    private void swapRowIndex() {
+        this.rowIndex = rowIndex == 1 ? 2 : 1;
     }
 
 }

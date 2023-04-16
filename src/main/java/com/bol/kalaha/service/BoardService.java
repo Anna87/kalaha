@@ -68,23 +68,28 @@ public class BoardService {
     }
 
     private void moveOneStone(final Board board, final RoundHolder roundHolder) {
-        if (!roundHolder.isKalaha()) {
-            if (checkRuleEmptyOwnCell(board, roundHolder) && roundHolder.isLastStone()) {
-                stealStones(board, roundHolder);
-            } else {
-                putOneStoneInCell(board, roundHolder.getRowIndex(), roundHolder.getCellIndex());
-            }
-        } else {
-            if (roundHolder.checkRuleIsOwnKalaha()) {
-                putOneStoneInKalaha(board, roundHolder.getRowIndex());
-
-                // last stone comes in own kalaha
-                if (roundHolder.isLastStone()) {
-                    roundHolder.setCanDoExtraRound(true);
-                }
-            }
+        if (roundHolder.putInCell()) {
+            putInCell(board, roundHolder);
+        } else if (roundHolder.checkRuleIsOwnKalaha()) {
+            putInOwnKalaha(board, roundHolder);
         }
+    }
 
+    private void putInOwnKalaha(Board board, RoundHolder roundHolder) {
+        putOneStoneInKalaha(board, roundHolder.getRowIndex());
+
+        // last stone comes in own kalaha
+        if (roundHolder.isLastStone()) {
+            roundHolder.setCanDoExtraRound(true);
+        }
+    }
+
+    private void putInCell(Board board, RoundHolder roundHolder) {
+        if (checkRuleEmptyOwnCell(board, roundHolder) && roundHolder.isLastStone()) {
+            stealStones(board, roundHolder);
+        } else {
+            putOneStoneInCell(board, roundHolder.getRowIndex(), roundHolder.getCellIndex());
+        }
     }
 
     private void stealStones(final Board board, final RoundHolder roundHolder) {

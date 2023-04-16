@@ -6,6 +6,7 @@ import com.bol.kalaha.repository.model.Board;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import lombok.SneakyThrows;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.Customization;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import static com.bol.kalaha.BoardClient.*;
+import static com.bol.kalaha.FileUtil.classpathFileToString;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,13 +51,12 @@ public class GameIT {
         final String actual = initBoard();
 
         // then
-        JSONAssert.assertEquals(classpathFileToString("/board/expected/new-board.json"), actual, new CustomComparator(
-                JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
+        validateSkipBoardId(actual, "/board/expected/new-board.json");
     }
 
     @Test
     @SneakyThrows
-    void shouldPlay() {
+    void shouldPlaySimpleGame() {
         // given
         final BoardState board = createBoard();
 
@@ -63,8 +64,22 @@ public class GameIT {
         final String play = play(classpathFileToString("/board/request/first-1-request.json"), board.getBoardId());
 
         // then
-        JSONAssert.assertEquals(classpathFileToString("/board/expected/should-play.json"), play, new CustomComparator(
-                JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
+        validateSkipBoardId(play, "/board/expected/should-play.json");
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldSkipOpponentKalaha() {
+        // given
+        final Board boardSkipOpponentKalaha = objectMapper.readValue(classpathFileToString("/board/board-skip-opponent-kalaha.json"),
+                                                   Board.class);
+        final Board newBoard = boardRepository.create(boardSkipOpponentKalaha);
+
+        //when
+        final String play = play(classpathFileToString("/board/request/first-5-request.json"), newBoard.getId());
+
+        // then
+        validateSkipBoardId(play, "/board/expected/skip-opponent-kalaha-response.json");
     }
 
     @Test
@@ -77,10 +92,7 @@ public class GameIT {
         final String play = play(classpathFileToString("/board/request/first-0-request.json"), board.getBoardId());
 
         // then
-        JSONAssert.assertEquals(classpathFileToString("/board/expected/extra-round-response.json"),
-                                play,
-                                new CustomComparator(
-                                        JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
+        validateSkipBoardId(play, "/board/expected/extra-round-response.json");
     }
 
     @Test
@@ -95,10 +107,7 @@ public class GameIT {
         final String play = play(classpathFileToString("/board/request/first-0-request.json"), newBoard.getId());
 
         // then
-        JSONAssert.assertEquals(classpathFileToString("/board/expected/steal-stones-response.json"),
-                                play,
-                                new CustomComparator(
-                                        JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
+        validateSkipBoardId(play, "/board/expected/steal-stones-response.json");
     }
 
     @Test
@@ -113,10 +122,7 @@ public class GameIT {
         final String play = play(classpathFileToString("/board/request/first-5-request.json"), newBoard.getId());
 
         // then
-        JSONAssert.assertEquals(classpathFileToString("/board/expected/end-game-response.json"),
-                                play,
-                                new CustomComparator(
-                                        JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
+        validateSkipBoardId(play, "/board/expected/end-game-response.json");
     }
 
     @Test
@@ -131,14 +137,11 @@ public class GameIT {
         final String play = play(classpathFileToString("/board/request/first-3-request.json"), newBoard.getId());
 
         // then
-        JSONAssert.assertEquals(classpathFileToString("/board/expected/steal-opponent-end-game-response.json"),
-                                play,
-                                new CustomComparator(
-                                        JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
+        validateSkipBoardId(play, "/board/expected/steal-opponent-end-game-response.json");
     }
 
-
-    public static String classpathFileToString(String path) throws IOException {
-        return Files.readString(new ClassPathResource(path).getFile().toPath());
+    private void validateSkipBoardId(String actual, String pathToExpectedResponse) throws JSONException, IOException {
+        JSONAssert.assertEquals(classpathFileToString(pathToExpectedResponse), actual, new CustomComparator(
+                JSONCompareMode.STRICT, new Customization("boardId", (o1, o2) -> true)));
     }
 }
