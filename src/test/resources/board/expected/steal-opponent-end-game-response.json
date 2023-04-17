@@ -1,6 +1,6 @@
 {
   "boardId": "7600de83-9ebe-4811-bcfb-d4963b62aa50",
-  "nextPlayer": "FIRST",
+  "nextPlayer": "ONE",
   "rowOne": {
     "cells": [
       {
@@ -48,5 +48,5 @@
     "kalahaStones": 30
   },
   "gameOver": true,
-  "winner": "SECOND"
+  "winner": "TWO"
 }
