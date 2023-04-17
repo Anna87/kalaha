@@ -2,7 +2,7 @@
   "boardId": "7600de83-9ebe-4811-bcfb-d4963b62aa50",
   "nextPlayer": "ONE",
   "rowOne": {
-    "cells": [
+    "pits": [
       {
         "stones": 6
       },
@@ -25,7 +25,7 @@
     "kalahaStones": 0
   },
   "rowTwo": {
-    "cells": [
+    "pits": [
       {
         "stones": 6
       },

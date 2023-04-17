@@ -24,8 +24,8 @@ public class Board {
         return rowIndex == 1 ? this.rowOne : this.rowTwo;
     }
 
-    public Cell getCell(final int rowIndex, final int cellIndex) {
-        return getRowByIndex(rowIndex).getCells().get(cellIndex);
+    public Pit getPit(final int rowIndex, final int pitIndex) {
+        return getRowByIndex(rowIndex).getPits().get(pitIndex);
     }
 
     public boolean hasEmptyRow() {
@@ -46,7 +46,7 @@ public class Board {
     }
 
     private boolean isRowEmpty(final Row row) {
-        return row.getCells().stream().allMatch(cell -> cell.getStones() == 0);
+        return row.getPits().stream().allMatch(pit -> pit.getStones() == 0);
     }
 
 }

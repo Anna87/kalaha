@@ -1,11 +1,15 @@
 package com.bol.kalaha;
 
+import com.bol.kalaha.controller.BoardController;
 import com.bol.kalaha.controller.response.BoardState;
+import com.bol.kalaha.exception.PlayerOrderException;
 import com.bol.kalaha.repository.BoardRepository;
 import com.bol.kalaha.repository.model.Board;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.module.mockmvc.specification.MockMvcRequestSpecBuilder;
 import lombok.SneakyThrows;
+import org.assertj.core.api.Assertions;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,14 +21,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 
 import static com.bol.kalaha.BoardClient.*;
 import static com.bol.kalaha.FileUtil.classpathFileToString;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -97,9 +106,9 @@ public class GameIT {
 
     @Test
     @SneakyThrows
-    void whenPutLastStoneInOwnEmptyCell_then_stealOpponentStones() {
+    void whenPutLastStoneInOwnEmptyPit_then_stealOpponentStones() {
         // given
-        final Board board = objectMapper.readValue(classpathFileToString("/board/board-with-empty-cell.json"),
+        final Board board = objectMapper.readValue(classpathFileToString("/board/board-with-empty-pit.json"),
                                                    Board.class);
         final Board newBoard = boardRepository.create(board);
 
@@ -138,6 +147,24 @@ public class GameIT {
 
         // then
         validateSkipBoardId(play, "/board/expected/steal-opponent-end-game-response.json");
+    }
+
+    @Test
+    void whenPitIndexOutOfRange() throws IOException {
+        // given
+        final BoardState board = createBoard();
+
+        // when - then
+        RestAssuredMockMvc.given()
+                                                .spec(new MockMvcRequestSpecBuilder().setBasePath(
+                                                        BoardController.API_BOARD).build())
+                                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                .body(classpathFileToString("/board/request/first-6-request.json"))
+                                                .when()
+                                                .put("/{id}", board.getBoardId())
+                                                .then()
+                                                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     private void validateSkipBoardId(String actual, String pathToExpectedResponse) throws JSONException, IOException {

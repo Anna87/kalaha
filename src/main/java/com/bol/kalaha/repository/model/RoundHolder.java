@@ -11,15 +11,15 @@ public class RoundHolder {
     private int stones;
     private Player currentPlayer;
     private int rowIndex;
-    private int cellIndex;
+    private int pitIndex;
     private boolean canDoExtraRound;
 
     public void shift() {
         if (isKalaha()) {
             swapRowIndex();
-            resetCellIndex();
+            resetPitIndex();
         } else {
-            incrementCellIndex();
+            incrementPitIndex();
         }
 
         if (!isOpponentKalaha()) {
@@ -29,10 +29,10 @@ public class RoundHolder {
     }
 
     public boolean isKalaha() {
-        return this.cellIndex == KALAHA_INDEX;
+        return this.pitIndex == KALAHA_INDEX;
     }
 
-    public boolean putInCell() {
+    public boolean putInPit() {
         return !isKalaha();
     }
 
@@ -53,12 +53,12 @@ public class RoundHolder {
         return this.stones == 1;
     }
 
-    private void incrementCellIndex() {
-        this.cellIndex++;
+    private void incrementPitIndex() {
+        this.pitIndex++;
     }
 
-    private void resetCellIndex() {
-        this.cellIndex = 0;
+    private void resetPitIndex() {
+        this.pitIndex = 0;
     }
 
     private void swapRowIndex() {

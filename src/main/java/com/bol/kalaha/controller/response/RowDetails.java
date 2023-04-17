@@ -1,6 +1,5 @@
 package com.bol.kalaha.controller.response;
 
-import com.bol.kalaha.repository.model.Cell;
 import com.bol.kalaha.repository.model.Row;
 import lombok.Builder;
 import lombok.Value;
@@ -10,13 +9,13 @@ import java.util.List;
 @Value
 @Builder
 public class RowDetails {
-    List<CellDetails> cells;
+    List<PitDetails> pits;
     int kalahaStones;
 
     public static RowDetails from(Row row){
         return RowDetails.builder()
                   .kalahaStones(row.getKalahaStones())
-                  .cells(row.getCells().stream().map(cell -> new CellDetails(cell.getStones())).toList())
+                  .pits(row.getPits().stream().map(pit -> new PitDetails(pit.getStones())).toList())
                   .build();
     }
 }

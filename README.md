@@ -20,6 +20,13 @@ The game is over as soon as one of the sides runs out of stones. The player who 
 * Client could play game
 * Client could retrieve game board
 
+## Tech stack
+* Java
+* Spring Boot
+* Angular
+* Maven
+* Docker
+
 ## How to run
 ### Backend
 * Clone this repository
@@ -35,7 +42,7 @@ Play according to the Game rules
 
 ### POST
 ```http request
-curl --location 'http://localhost:3000//api/boards' --header 'Content-Type: application/json'
+curl --location 'http://localhost:3000/api/boards' --header 'Content-Type: application/json'
 ```
 This endpoint initialize a board game with default settings.
 
@@ -44,24 +51,24 @@ This endpoint returns a response with HTTP status code 200 (OK) play request suc
 
 `boardId` (UUID): the board id \
 `nextPlayer` (enum): next player: ONE, TWO \
-`rowOne` (RowDetails): object containing cells and kalaha for Player.ONE\
-`rowTwo` (RowDetails): object containing cells and kalaha for Player.TWO\
+`rowOne` (RowDetails): object containing pits and kalaha for Player.ONE\
+`rowTwo` (RowDetails): object containing pits and kalaha for Player.TWO\
 `gameOver` (boolean): state of the end of the game\
 `winner` (enum): winner player: ONE, TWO
 ##### Response models
 ###### RowDetails
-`cells` (Array): keeps cells \
+`pits` (Array): keeps pits \
 `kalahaStones` (int): number of stones in Kalaha
 
-###### CellDetails
-`stones` (int): number  of stones in cell
+###### pitDetails
+`stones` (int): number  of stones in pit
 Example of response:
 ```json
 {
   "boardId": "43ea97d0-b274-4550-8b29-4d14d1b21f04",
   "nextPlayer": "ONE",
   "rowOne": {
-    "cells": [
+    "pits": [
       {
         "stones": 6
       },
@@ -84,7 +91,7 @@ Example of response:
     "kalahaStones": 0
   },
   "rowTwo": {
-    "cells": [
+    "pits": [
       {
         "stones": 6
       },
@@ -115,51 +122,51 @@ Example of response:
 
 ### PUT 
 ```http request
-curl --location 'http://localhost:3000//api/boards/{id}' --header 'Content-Type: application/json'
+curl --location 'http://localhost:3000/api/boards/{id}' --header 'Content-Type: application/json'
 ```
 This endpoint receives a play request to execute on boardId. 
 
 #### Request Body
 The request body should contain a JSON object with the following fields:
 
-`cellIndex` (int, 0 <= size <= 5): the index of player cell \
+`pitIndex` (int, 0 <= size <= 5): the index of player pit \
 `player` (enum): type of player: ONE, TWO
 
 Example:
 ```json
 {
-  "cellIndex": "0",
+  "pitIndex": "0",
   "player": "ONE"
 }
 ```
 ##### Response
 This endpoint returns a response with HTTP status code 200 (OK) play request successfully processed.\
-This endpoint returns a response with HTTP status code 404 (NOT_FOUND) if board not found.
-This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the cellIndex is out of range.
-This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the cell has no stones.
-This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the wrong player order.
+This endpoint returns a response with HTTP status code 404 (NOT_FOUND) if board not found.\
+This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the pitIndex is out of range.\
+This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the pit has no stones.\
+This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the wrong player order.\
 This endpoint returns a response with HTTP status code 400 (BAD_REQUEST) if the game is over.
 
 `boardId` (UUID): the board id \
 `nextPlayer` (enum): next player: ONE, TWO \
-`rowOne` (RowDetails): object containing cells and kalaha for Player.ONE\
-`rowTwo` (RowDetails): object containing cells and kalaha for Player.TWO\
+`rowOne` (RowDetails): object containing pits and kalaha for Player.ONE\
+`rowTwo` (RowDetails): object containing pits and kalaha for Player.TWO\
 `gameOver` (boolean): state of the end of the game\
 `winner` (enum): winner player: ONE, TWO
 ##### Response models
 ###### RowDetails
-`cells` (Array): keeps cells \
+`pits` (Array): keeps pits \
 `kalahaStones` (int): number of stones in Kalaha
 
-###### CellDetails
-`stones` (int): number  of stones in cell
+###### pitDetails
+`stones` (int): number  of stones in pit
 Example of response:
 ```json
 {
   "boardId": "43ea97d0-b274-4550-8b29-4d14d1b21f04",
   "nextPlayer": "TWO",
   "rowOne": {
-    "cells": [
+    "pits": [
       {
         "stones": 6
       },
@@ -182,7 +189,7 @@ Example of response:
     "kalahaStones": 5
   },
   "rowTwo": {
-    "cells": [
+    "pits": [
       {
         "stones": 7
       },
@@ -212,7 +219,7 @@ Example of response:
 
 ### GET
 ```http request
-curl --location 'http://localhost:3000//api/boards/{id}' --header 'Content-Type: application/json'
+curl --location 'http://localhost:3000/api/boards/{id}' --header 'Content-Type: application/json'
 ```
 This endpoint retrieves a board game state by boardId.
 
@@ -222,24 +229,24 @@ This endpoint returns a response with HTTP status code 404 (NOT_FOUND) if board 
 
 `boardId` (UUID): the board id \
 `nextPlayer` (enum): next player: ONE, TWO \
-`rowOne` (RowDetails): object containing cells and kalaha for Player.ONE\
-`rowTwo` (RowDetails): object containing cells and kalaha for Player.TWO\
+`rowOne` (RowDetails): object containing pits and kalaha for Player.ONE\
+`rowTwo` (RowDetails): object containing pits and kalaha for Player.TWO\
 `gameOver` (boolean): state of the end of the game\
 `winner` (enum): winner player: ONE, TWO
 ##### Response models
 ###### RowDetails
-`cells` (Array): keeps cells \
+`pits` (Array): keeps pits \
 `kalahaStones` (int): number of stones in Kalaha
 
-###### CellDetails
-`stones` (int): number  of stones in cell
+###### pitDetails
+`stones` (int): number  of stones in pit
 Example of response:
 ```json
 {
   "boardId": "43ea97d0-b274-4550-8b29-4d14d1b21f04",
   "nextPlayer": "TWO",
   "rowOne": {
-    "cells": [
+    "pits": [
       {
         "stones": 0
       },
@@ -262,7 +269,7 @@ Example of response:
     "kalahaStones": 1
   },
   "rowTwo": {
-    "cells": [
+    "pits": [
       {
         "stones": 6
       },

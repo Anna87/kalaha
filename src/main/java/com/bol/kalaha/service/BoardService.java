@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 import static com.bol.kalaha.repository.model.Player.*;
-import static com.bol.kalaha.service.CellHelper.*;
+import static com.bol.kalaha.service.PitHelper.*;
 import static com.bol.kalaha.service.RoundValidator.validateBoardState;
 
 @RequiredArgsConstructor
@@ -44,15 +44,15 @@ public class BoardService {
     }
 
     private RoundHolder buildRoundHolder(final PlayRequest playRequest, final Board board) {
-        final int cellIndex = playRequest.getCellIndex();
+        final int pitIndex = playRequest.getPitIndex();
         final int currentPlayerRowIndex = getCurrentPlayerRowIndex(playRequest.getPlayer());
-        final int stones = pollStones(board, currentPlayerRowIndex, cellIndex);
+        final int stones = pollStones(board, currentPlayerRowIndex, pitIndex);
 
         return RoundHolder.builder()
                           .stones(stones)
                           .currentPlayer(playRequest.getPlayer())
                           .rowIndex(currentPlayerRowIndex)
-                          .cellIndex(cellIndex + 1)
+                          .pitIndex(pitIndex + 1)
                           .build();
     }
 
@@ -68,8 +68,8 @@ public class BoardService {
     }
 
     private void moveOneStone(final Board board, final RoundHolder roundHolder) {
-        if (roundHolder.putInCell()) {
-            putInCell(board, roundHolder);
+        if (roundHolder.putInPit()) {
+            putInPit(board, roundHolder);
         } else if (roundHolder.checkRuleIsOwnKalaha()) {
             putInOwnKalaha(board, roundHolder);
         }
@@ -84,21 +84,21 @@ public class BoardService {
         }
     }
 
-    private void putInCell(Board board, RoundHolder roundHolder) {
-        if (checkRuleEmptyOwnCell(board, roundHolder) && roundHolder.isLastStone()) {
-            stealStones(board, roundHolder);
+    private void putInPit(Board board, RoundHolder roundHolder) {
+        if (checkRuleEmptyOwnPit(board, roundHolder) && roundHolder.isLastStone()) {
+            captureStones(board, roundHolder);
         } else {
-            putOneStoneInCell(board, roundHolder.getRowIndex(), roundHolder.getCellIndex());
+            putOneStoneInPit(board, roundHolder.getRowIndex(), roundHolder.getPitIndex());
         }
     }
 
-    private void stealStones(final Board board, final RoundHolder roundHolder) {
+    private void captureStones(final Board board, final RoundHolder roundHolder) {
         final int rowIndex = roundHolder.getRowIndex();
         putOneStoneInKalaha(board, rowIndex);
 
-        final int reverseCellIndex = getReverseCellIndex(roundHolder.getCellIndex());
+        final int reversePitIndex = getReversePitIndex(roundHolder.getPitIndex());
         final int reverseRowIndex = getReverseRowIndex(rowIndex);
-        final int stones = pollStones(board, reverseRowIndex, reverseCellIndex);
+        final int stones = pollStones(board, reverseRowIndex, reversePitIndex);
 
         putStonesInKalaha(board, rowIndex, stones);
     }

@@ -2,7 +2,7 @@
   "boardId": null,
   "nextPlayer": "ONE",
   "rowOne": {
-    "cells": [
+    "pits": [
       {
         "stones": 5
       },
@@ -25,7 +25,7 @@
     "kalahaStones": 0
   },
   "rowTwo": {
-    "cells": [
+    "pits": [
       {
         "stones": 0
       },

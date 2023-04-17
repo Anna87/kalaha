@@ -2,20 +2,20 @@ package com.bol.kalaha.service;
 
 import com.bol.kalaha.controller.request.PlayRequest;
 import com.bol.kalaha.repository.model.Board;
-import com.bol.kalaha.repository.model.Cell;
+import com.bol.kalaha.repository.model.Pit;
 import com.bol.kalaha.repository.model.Player;
-import com.bol.kalaha.exception.EmptyCellException;
+import com.bol.kalaha.exception.EmptyPitException;
 import com.bol.kalaha.exception.GameOverException;
 import com.bol.kalaha.exception.PlayerOrderException;
 import lombok.experimental.UtilityClass;
 
-import static com.bol.kalaha.service.CellHelper.getCurrentCell;
+import static com.bol.kalaha.service.PitHelper.getCurrentPit;
 
 @UtilityClass
 public class RoundValidator {
     public static void validateBoardState(final Board board, final PlayRequest playRequest) {
         validateIsGameOver(board);
-        validateCellHasStones(board, playRequest);
+        validatePitHasStones(board, playRequest);
         validatePlayerOrder(board, playRequest);
     }
 
@@ -25,10 +25,10 @@ public class RoundValidator {
         }
     }
 
-    public static void validateCellHasStones(final Board board, final PlayRequest playRequest) {
-        final Cell currentCell = getCurrentCell(board, playRequest.getCellIndex());
-        if (currentCell.getStones() == 0) {
-            throw new EmptyCellException("Current cell is empty");
+    public static void validatePitHasStones(final Board board, final PlayRequest playRequest) {
+        final Pit currentPit = getCurrentPit(board, playRequest.getPitIndex());
+        if (currentPit.getStones() == 0) {
+            throw new EmptyPitException("Current pit is empty");
         }
     }
 
