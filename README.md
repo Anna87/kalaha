@@ -34,6 +34,8 @@ The game is over as soon as one of the sides runs out of stones. The player who 
 * Run `docker run -p3000:3000 bol/kalaha` to run image
 
 ### Frontend
+* Clone kalaha-fe repository
+* Run `ng serve` 
 
 ### Usage
 Play according to the Game rules
