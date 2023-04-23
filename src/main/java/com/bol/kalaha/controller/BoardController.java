@@ -16,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(BoardController.API_BOARD)
+@CrossOrigin(value = "*")
 public class BoardController {
     public static final String API_BOARD = "/api/boards";
 

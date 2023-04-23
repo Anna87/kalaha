@@ -68,17 +68,16 @@ public class BoardService {
     }
 
     private void moveOneStone(final Board board, final RoundHolder roundHolder) {
-        if (roundHolder.putInPit()) {
+        if (roundHolder.isPit()) {
             putInPit(board, roundHolder);
-        } else if (roundHolder.checkRuleIsOwnKalaha()) {
+        } else if (roundHolder.isOwnKalaha()) {
             putInOwnKalaha(board, roundHolder);
         }
     }
 
     private void putInOwnKalaha(Board board, RoundHolder roundHolder) {
         putOneStoneInKalaha(board, roundHolder.getRowIndex());
-
-        // last stone comes in own kalaha
+        
         if (roundHolder.isLastStone()) {
             roundHolder.setCanDoExtraRound(true);
         }

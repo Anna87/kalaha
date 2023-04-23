@@ -15,33 +15,24 @@ public class RoundHolder {
     private boolean canDoExtraRound;
 
     public void shift() {
-        if (isKalaha()) {
-            swapRowIndex();
-            resetPitIndex();
-        } else {
-            incrementPitIndex();
-        }
-
-        if (!isOpponentKalaha()) {
+        if (isOwnKalaha() || isPit()) {
             this.stones--;
         }
 
+        if (isPit()) {
+            incrementPitIndex();
+        } else {
+            swapRowIndex();
+            resetPitIndex();
+        }
     }
 
-    public boolean isKalaha() {
-        return this.pitIndex == KALAHA_INDEX;
+    public boolean isPit() {
+        return this.pitIndex != KALAHA_INDEX;
     }
 
-    public boolean putInPit() {
-        return !isKalaha();
-    }
-
-    private boolean isOpponentKalaha() {
-        return isKalaha() && !isOwnRow();
-    }
-
-    public boolean checkRuleIsOwnKalaha() {
-        return isOwnRow() && isKalaha();
+    public boolean isOwnKalaha() {
+        return isOwnRow() && !isPit();
     }
 
     public boolean isOwnRow() {
