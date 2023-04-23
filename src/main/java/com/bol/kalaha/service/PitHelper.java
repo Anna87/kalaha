@@ -35,7 +35,7 @@ public class PitHelper {
         addStonesToKalaha(stones, board.getRowByIndex(rowIndex));
     }
 
-    public static boolean checkRuleEmptyOwnPit(Board board, RoundHolder roundHolder) {
+    public static boolean isEmptyOwnPit(Board board, RoundHolder roundHolder) {
         return roundHolder.isOwnRow()
                 && getPit(board, roundHolder.getRowIndex(), roundHolder.getPitIndex()).getStones() == 0;
     }

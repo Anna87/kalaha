@@ -77,14 +77,13 @@ public class BoardService {
 
     private void putInOwnKalaha(Board board, RoundHolder roundHolder) {
         putOneStoneInKalaha(board, roundHolder.getRowIndex());
-        
         if (roundHolder.isLastStone()) {
             roundHolder.setCanDoExtraRound(true);
         }
     }
 
     private void putInPit(Board board, RoundHolder roundHolder) {
-        if (checkRuleEmptyOwnPit(board, roundHolder) && roundHolder.isLastStone()) {
+        if (isEmptyOwnPit(board, roundHolder) && roundHolder.isLastStone()) {
             captureStones(board, roundHolder);
         } else {
             putOneStoneInPit(board, roundHolder.getRowIndex(), roundHolder.getPitIndex());

@@ -15,7 +15,7 @@ public class RoundHolder {
     private boolean canDoExtraRound;
 
     public void shift() {
-        if (isOwnKalaha() || isPit()) {
+        if (isPit() || isOwnKalaha()) {
             this.stones--;
         }
 
