@@ -2,14 +2,13 @@ package com.bol.kalaha;
 
 import com.bol.kalaha.controller.BoardController;
 import com.bol.kalaha.controller.response.BoardState;
-import com.bol.kalaha.exception.PlayerOrderException;
 import com.bol.kalaha.repository.BoardRepository;
 import com.bol.kalaha.repository.model.Board;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecBuilder;
 import lombok.SneakyThrows;
-import org.assertj.core.api.Assertions;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,20 +19,16 @@ import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.io.IOException;
-import java.nio.file.Files;
 
 import static com.bol.kalaha.BoardClient.*;
 import static com.bol.kalaha.FileUtil.classpathFileToString;
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.Matchers.contains;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -164,7 +159,8 @@ public class GameIT {
                                                 .when()
                                                 .put("/{id}", board.getBoardId())
                                                 .then()
-                                                .statusCode(HttpStatus.BAD_REQUEST.value());
+                                                .statusCode(HttpStatus.BAD_REQUEST.value())
+                                                .body("message", contains("Validation failed for object"));
     }
 
     private void validateSkipBoardId(String actual, String pathToExpectedResponse) throws JSONException, IOException {
