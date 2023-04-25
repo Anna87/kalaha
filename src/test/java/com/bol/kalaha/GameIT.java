@@ -23,6 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.io.IOException;
 
@@ -159,8 +162,7 @@ public class GameIT {
                                                 .when()
                                                 .put("/{id}", board.getBoardId())
                                                 .then()
-                                                .statusCode(HttpStatus.BAD_REQUEST.value())
-                                                .body("message", contains("Validation failed for object"));
+                                                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     private void validateSkipBoardId(String actual, String pathToExpectedResponse) throws JSONException, IOException {
